@@ -1,0 +1,10 @@
+public/assets/*
+.ruby-version
+.env
+.bundle
+vendor/bundle
+log/*
+tmp/*
+.DS_Store
+.dockerignore
+.git*

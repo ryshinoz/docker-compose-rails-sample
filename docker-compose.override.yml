@@ -1,0 +1,11 @@
+version: '2'
+services:
+  app:
+    ports:
+      - "3000:3000"
+  redis:
+    ports:
+      - "6379:6379"
+  mysql:
+    ports:
+      - "3306:3306"

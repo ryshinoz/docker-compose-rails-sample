@@ -1,0 +1,42 @@
+version: '2'
+services:
+  data:
+    image: busybox
+    volumes:
+      - mysql:/var/lib/mysql
+      - bundle:/usr/local/bundle
+  bundle-data:
+    image: busybox
+  mysql:
+    build: ./docker/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ./docker/mysql/init.d:/docker-entrypoint-initdb.d
+    volumes_from:
+      - data
+  redis:
+    image: redis:alpine
+  app:
+    build:
+      context: .
+      args:
+        APP_HOME: /app
+    command: bundle exec rails s -p 3000 -b 0.0.0.0
+    links:
+      - mysql
+      - redis
+    environment:
+      DATABASE_USER: sample_user
+      DATABASE_PASSWORD: sample_password
+      DATABASE_HOST: mysql
+      REDIS_HOST: redis
+    volumes:
+      - .:/app
+    volumes_from:
+      - data
+volumes:
+  mysql:
+    driver: local
+  bundle:
+    driver: local
